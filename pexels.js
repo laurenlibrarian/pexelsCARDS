@@ -1,36 +1,33 @@
-// pexels.js
-
-const API_KEY = 'YOUR_PEXELS_API_KEY';
-const BASE_URL = 'https://api.pexels.com/v1';
-
-// Function to fetch curated photos
-async function fetchCurated(page = 1, per_page = 15) {
-    const response = await fetch(`${BASE_URL}/curated?page=${page}&per_page=${per_page}`, {
-        headers: {
-            Authorization: API_KEY
-        }
-    });
-    return await response.json();
-}
-
-// Function to search for photos
-async function searchPhotos(query, page = 1, per_page = 15) {
-    const response = await fetch(`${BASE_URL}/search?query=${query}&page=${page}&per_page=${per_page}`, {
-        headers: {
-            Authorization: API_KEY
-        }
-    });
-    return await response.json();
-}
-
-// Export functions for external use
-export { fetchCurated, searchPhotos };
-
-'use strict';
-
-import dotenv from 'dotenv';
-dotenv.config();
+require('dotenv').config();
 
 const API_KEY = process.env.PEXELS_API_KEY;
-const API_URL = 'https://api.pexels.com/v1/';
-// other codes...
+
+const fetchPhotos = async (query) => {
+    const response = await fetch(`https://api.pexels.com/v1/search?query=${query}`, {
+        headers: {
+            Authorization: API_KEY,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch photos');
+    }
+
+    const data = await response.json();
+    return data.photos;
+};
+
+const displayPhotos = (photos) => {
+    // Code to display photos in the UI.
+};
+
+const searchAndDisplayPhotos = async (query) => {
+    try {
+        const photos = await fetchPhotos(query);
+        displayPhotos(photos);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+searchAndDisplayPhotos('nature');
