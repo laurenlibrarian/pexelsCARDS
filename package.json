@@ -1,1 +1,9 @@
-
+{
+  "type": "module",
+  "name": "pexels-cards",
+  "version": "1.0.0",
+  "dependencies": {
+    "dotenv": "latest",
+    "node-fetch": "latest"
+  }
+}
