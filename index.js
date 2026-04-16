@@ -1,19 +1,19 @@
-import dotenv from 'dotenv';
-import { fetchCurated, searchPhotos } from './pexels.js';
+import { fetchCollectionPhotos } from './photoService';
 
-dotenv.config();
+const displayPhotos = async () => {
+    const photos = await fetchCollectionPhotos('STEM');
+    const photoContainer = document.getElementById('photoContainer');
+    photoContainer.innerHTML = '';
 
-const demonstrateAPI = async () => {
-    try {
-        const curatedPhotos = await fetchCurated();
-        console.log('Curated Photos:', curatedPhotos);
-
-        const searchTerm = 'nature';
-        const searchResults = await searchPhotos(searchTerm);
-        console.log(`Search Results for ${searchTerm}:`, searchResults);
-    } catch (error) {
-        console.error('Error using Pexels API:', error);
-    }
+    photos.forEach(photo => {
+        const photoElement = document.createElement('div');
+        photoElement.innerHTML = `
+            <h2>${photo.photographer}</h2>
+            <img src='${photo.imageUrl}' alt='${photo.alt}' />
+            <p>Photographer URL: <a href='${photo.photographerUrl}'>${photo.photographerUrl}</a></p>
+        `;
+        photoContainer.appendChild(photoElement);
+    });
 };
 
-demonstrateAPI();
+displayPhotos();
