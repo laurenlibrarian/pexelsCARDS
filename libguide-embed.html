@@ -34,53 +34,71 @@
     margin: 1rem 0;
 }
 
+/* 3 columns on wide screens, 2 on tablet, 1 on mobile */
 .pexels-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 }
 
+@media (max-width: 680px) {
+    .pexels-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 420px) {
+    .pexels-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card: image fills it, text bar overlays the bottom */
 .pexels-card {
-    background: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    aspect-ratio: 4 / 3;
     transition: box-shadow 0.2s;
 }
 
 .pexels-card:hover {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .pexels-card img {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: 190px;
+    height: 100%;
     object-fit: cover;
     display: block;
-    background: #e8e8e8;
 }
 
+/* White bar pinned to the bottom of the image */
 .pexels-card-body {
-    padding: 0.75rem 1rem;
-    flex-grow: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    padding: 0.55rem 0.85rem;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.2rem;
 }
 
 .pexels-card-alt {
-    font-size: 0.9rem;
-    color: #333;
-    line-height: 1.4;
+    font-size: 0.85rem;
+    color: #111;
+    line-height: 1.3;
     margin: 0;
 }
 
 .pexels-card-credit {
-    font-size: 0.78rem;
-    color: #666;
-    margin: auto 0 0;
+    font-size: 0.73rem;
+    color: #333;
 }
 
 .pexels-card-credit a {
@@ -94,7 +112,7 @@
 
 .pexels-attribution {
     text-align: right;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: #999;
     margin-top: 0.5rem;
 }
@@ -127,7 +145,7 @@
     /* ---- CONFIGURE HERE --------------------------------- */
     var API_KEY       = 'YOUR_PEXELS_API_KEY_HERE'; // required
     var COLLECTION_ID = '3zsyinq';                  // your collection ID
-    var PER_PAGE      = 15;
+    var PER_PAGE      = 3;                          // newest 3 photos
     /* ----------------------------------------------------- */
 
     var API_BASE = 'https://api.pexels.com/v1';

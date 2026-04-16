@@ -16,7 +16,7 @@
     const cfg = window.PEXELS_CONFIG || {};
     const API_KEY       = cfg.apiKey       || '';
     const COLLECTION_ID = cfg.collectionId || '3zsyinq';
-    const PER_PAGE      = cfg.perPage      || 15;
+    const PER_PAGE      = cfg.perPage      || 3;
     const API_BASE      = 'https://api.pexels.com/v1';
 
     function escapeHtml(str) {
