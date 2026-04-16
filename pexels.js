@@ -1,33 +1,31 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+
+dotenv.config();
 
 const API_KEY = process.env.PEXELS_API_KEY;
+const API_URL = 'https://api.pexels.com/v1';
 
-const fetchPhotos = async (query) => {
-    const response = await fetch(`https://api.pexels.com/v1/search?query=${query}`, {
+export const fetchCurated = async () => {
+    const response = await fetch(`${API_URL}/curated`, {
         headers: {
             Authorization: API_KEY,
         },
     });
-
     if (!response.ok) {
-        throw new Error('Failed to fetch photos');
+        throw new Error('Failed to fetch curated photos');
     }
-
-    const data = await response.json();
-    return data.photos;
+    return await response.json();
 };
 
-const displayPhotos = (photos) => {
-    // Code to display photos in the UI.
-};
-
-const searchAndDisplayPhotos = async (query) => {
-    try {
-        const photos = await fetchPhotos(query);
-        displayPhotos(photos);
-    } catch (error) {
-        console.error(error);
+export const searchPhotos = async (query) => {
+    const response = await fetch(`${API_URL}/search?query=${query}`, {
+        headers: {
+            Authorization: API_KEY,
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch searched photos');
     }
+    return await response.json();
 };
-
-searchAndDisplayPhotos('nature');
