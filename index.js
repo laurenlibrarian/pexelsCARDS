@@ -1,20 +1,19 @@
-'use strict';
+import dotenv from 'dotenv';
+import { fetchCurated, searchPhotos } from './pexels.js';
 
-const { fetchPhotos, fetchPhoto } = require('./pexels');
+dotenv.config();
 
-async function demonstratePexelsUsage() {
+const demonstrateAPI = async () => {
     try {
-        console.log('Fetching photos...');
-        const photos = await fetchPhotos();
-        console.log('Fetched photos:', photos);
+        const curatedPhotos = await fetchCurated();
+        console.log('Curated Photos:', curatedPhotos);
 
-        const photoId = photos[0].id; // Assuming there's at least one photo
-        console.log(`Fetching details for photo ID ${photoId}...`);
-        const photoDetails = await fetchPhoto(photoId);
-        console.log('Photo details:', photoDetails);
+        const searchTerm = 'nature';
+        const searchResults = await searchPhotos(searchTerm);
+        console.log(`Search Results for ${searchTerm}:`, searchResults);
     } catch (error) {
-        console.error('Error fetching photos:', error);
+        console.error('Error using Pexels API:', error);
     }
-}
+};
 
-demonstratePexelsUsage();
+demonstrateAPI();
