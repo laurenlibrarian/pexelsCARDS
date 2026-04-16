@@ -1,0 +1,199 @@
+<!--
+  ============================================================
+  PEXELS PHOTO CARDS — LibGuides Embed
+  ============================================================
+  HOW TO USE IN LIBGUIDES:
+  1. In your LibGuide, add a "Rich Text / HTML" content box.
+  2. Click the "</>" (Source) button to switch to HTML view.
+  3. Paste the entire contents of this file.
+  4. Replace YOUR_PEXELS_API_KEY_HERE with your actual key.
+     Get a free key at https://www.pexels.com/api/
+  5. Optionally change COLLECTION_ID to your own Pexels
+     collection ID (found in the collection's URL).
+  6. Save and publish.
+
+  NOTE: Pexels API keys are read-only, so embedding one in a
+  public page is acceptable. Keep it out of version control
+  if possible — store it in LibGuides' Custom JS/CSS instead.
+  ============================================================
+-->
+
+<!-- 1. Card container -->
+<div id="pexels-cards-container">
+    <div id="pexels-cards-grid" class="pexels-cards-grid"></div>
+    <p class="pexels-attribution">
+        Photos provided by
+        <a href="https://www.pexels.com" target="_blank" rel="noopener noreferrer">Pexels</a>
+    </p>
+</div>
+
+<!-- 2. Styles (move to LibGuides "Custom CSS" if preferred) -->
+<style>
+#pexels-cards-container {
+    font-family: inherit;
+    margin: 1rem 0;
+}
+
+.pexels-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.pexels-card {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s;
+}
+
+.pexels-card:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.pexels-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    display: block;
+    background: #e8e8e8;
+}
+
+.pexels-card-body {
+    padding: 0.75rem 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.pexels-card-alt {
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.pexels-card-credit {
+    font-size: 0.78rem;
+    color: #666;
+    margin: auto 0 0;
+}
+
+.pexels-card-credit a {
+    color: #0055a5;
+    text-decoration: none;
+}
+
+.pexels-card-credit a:hover {
+    text-decoration: underline;
+}
+
+.pexels-attribution {
+    text-align: right;
+    font-size: 0.78rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.pexels-attribution a {
+    color: #0055a5;
+}
+
+.pexels-loading,
+.pexels-error {
+    grid-column: 1 / -1;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.pexels-error {
+    color: #b00020;
+    background: #fff5f7;
+    border: 1px solid #f5c2cc;
+    border-radius: 6px;
+}
+</style>
+
+<!-- 3. Script (move to LibGuides "Custom JS" if preferred) -->
+<script>
+(function () {
+    'use strict';
+
+    /* ---- CONFIGURE HERE --------------------------------- */
+    var API_KEY       = 'YOUR_PEXELS_API_KEY_HERE'; // required
+    var COLLECTION_ID = '3zsyinq';                  // your collection ID
+    var PER_PAGE      = 15;
+    /* ----------------------------------------------------- */
+
+    var API_BASE = 'https://api.pexels.com/v1';
+
+    function esc(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function renderCard(photo) {
+        return '<div class="pexels-card">'
+            + '<img src="' + esc(photo.src.medium) + '" alt="' + esc(photo.alt || 'Photo from Pexels') + '" loading="lazy">'
+            + '<div class="pexels-card-body">'
+            + (photo.alt ? '<p class="pexels-card-alt">' + esc(photo.alt) + '</p>' : '')
+            + '<p class="pexels-card-credit">Photo by '
+            + '<a href="' + esc(photo.photographer_url) + '" target="_blank" rel="noopener noreferrer">' + esc(photo.photographer) + '</a>'
+            + ' on <a href="https://www.pexels.com" target="_blank" rel="noopener noreferrer">Pexels</a>'
+            + '</p>'
+            + '</div>'
+            + '</div>';
+    }
+
+    function loadCards() {
+        var grid = document.getElementById('pexels-cards-grid');
+        if (!grid) return;
+
+        if (!API_KEY || API_KEY === 'YOUR_PEXELS_API_KEY_HERE') {
+            grid.innerHTML = '<p class="pexels-error">Add your Pexels API key to the embed script (API_KEY variable).</p>';
+            return;
+        }
+
+        grid.innerHTML = '<p class="pexels-loading">Loading photos\u2026</p>';
+
+        var url = API_BASE + '/collections/' + COLLECTION_ID
+            + '?type=photos&per_page=' + PER_PAGE + '&page=1';
+
+        fetch(url, { headers: { Authorization: API_KEY } })
+            .then(function (res) {
+                if (!res.ok) throw new Error('API error ' + res.status);
+                return res.json();
+            })
+            .then(function (data) {
+                var photos = (data.media || []).filter(function (item) {
+                    return item.type !== 'Video';
+                });
+                if (photos.length === 0) {
+                    grid.innerHTML = '<p class="pexels-loading">No photos found in this collection.</p>';
+                    return;
+                }
+                grid.innerHTML = photos.map(renderCard).join('');
+            })
+            .catch(function (err) {
+                grid.innerHTML = '<p class="pexels-error">Could not load photos — ' + esc(err.message) + '.</p>';
+                console.error('[pexels-cards]', err);
+            });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadCards);
+    } else {
+        loadCards();
+    }
+}());
+</script>

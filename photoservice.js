@@ -7,7 +7,7 @@ const COLLECTION_ID = '3zsyinq';
 const API_KEY = process.env.PEXELS_API_KEY;
 
 export const fetchCollectionPhotos = async () => {
-    const response = await fetch(`${API_URL}/collections/${COLLECTION_ID}/photos`, {
+    const response = await fetch(`${API_URL}/collections/${COLLECTION_ID}?type=photos&per_page=15&page=1`, {
         headers: {
             Authorization: API_KEY,
         },

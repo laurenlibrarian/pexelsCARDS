@@ -1,4 +1,4 @@
-import { fetchCollectionPhotos } from './photoService.js';
+import { fetchCollectionPhotos } from './photoservice.js';
 
 async function displaySTEMPhotos() {
     try {

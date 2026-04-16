@@ -1,1 +1,34 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Pexels Cards</title>\n    <link rel="stylesheet" href="styles.css">\n</head>\n<body>\n    <main>\n        <article class="card">\n            <figure>\n                <img src="image-small.jpg" alt="Description of image" srcset="image-small.jpg 600w, image-large.jpg 1200w" sizes="(max-width: 600px) 100vw, 50vw">\n                <figcaption>\n                    <h2>Card Title</h2>\n                    <p>This is a description of the card content. It provides additional details about the image and the topic of the card.</p>\n                </figcaption>\n            </figure>\n        </article>\n        <article class="card">\n            <figure>\n                <img src="image-small2.jpg" alt="Description of second image" srcset="image-small2.jpg 600w, image-large2.jpg 1200w" sizes="(max-width: 600px) 100vw, 50vw">\n                <figcaption>\n                    <h2>Card Title 2</h2>\n                    <p>This is a description of the second card content. It gives more information about the image shown.</p>\n                </figcaption>\n            </figure>\n        </article>\n    </main>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Photo Cards — Pexels Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>STEM Resources</h1>
+        <p>Browse curated images — powered by <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a></p>
+    </header>
+
+    <main>
+        <div id="pexels-cards-grid" class="pexels-cards-grid"></div>
+        <p class="pexels-attribution">
+            Photos provided by <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a>
+        </p>
+    </main>
+
+    <script>
+        // Set your Pexels API key here for local testing.
+        // In LibGuides, paste this block into the Rich Text box (HTML view)
+        // or the page's Custom JS field.
+        window.PEXELS_CONFIG = {
+            apiKey:       'YOUR_PEXELS_API_KEY_HERE',
+            collectionId: '3zsyinq',
+            perPage:      15,
+        };
+    </script>
+    <script src="cards.js"></script>
+</body>
+</html>
